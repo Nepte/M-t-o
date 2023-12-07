@@ -1,0 +1,271 @@
+﻿<Window x:Class="Weather.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        Loaded="Window_Loaded"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True" FontFamily="Cambria"
+        Background="Transparent" mc:Ignorable="d" Height="685" Width="995">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Left Side-->
+        <Border CornerRadius="30 0 0 30" Background="#FFFFFF">
+            <StackPanel>
+                <!--TextBox Search--><!--
+                <Border BorderBrush="#d9d9d9" BorderThickness="1" CornerRadius="15" HorizontalAlignment="Center" Width="200" Margin="0 35 0 0">
+                    <Grid Margin="7 7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="/Images/explore.png" Height="18" Margin="5 0 0 0"/>
+                        <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="Rechercher.." Style="{StaticResource textHint}"/>
+                        <TextBox Name="txtSearch" TextChanged="txtSearch_TextChanged" Style="{StaticResource textBox}"/>
+                    </Grid>
+                </Border>-->
+
+                <ComboBox x:Name="CitiesComboBox" SelectionChanged="CitiesComboBox_SelectionChanged" HorizontalAlignment="Center" Width="200" Margin="0 10 0 0" IsEditable="True"/>
+                <Button x:Name="AddCityButton" Content="Ajouter" Click="AddCityButton_Click" Style="{StaticResource ActionButtonStyle}"/>
+                <Button x:Name="RemoveCityButton" Content="Supprimer" Click="RemoveCityButton_Click" Style="{StaticResource ActionButtonStyle}"/>
+                <TextBox x:Name="NewCityTextBox"/>
+
+
+                <StackPanel Margin="50 60 0 0">
+                    <Image x:Name="WeatherIcon" Source="/Images/sun_cloud.png" Width="140" HorizontalAlignment="Left" />
+                    <TextBlock x:Name="TemperatureTextBlock" Text="12°c" FontSize="46" Margin="0 20 0 0"/>
+                    <TextBlock x:Name="WeatherConditionTextBlock" Text="Lundi, 16h00" FontSize="18" FontWeight="SemiBold" Margin="0 15 0 0"/>
+                    <Separator Background="#dadada" Margin="3 30 40 30" Height="0.8"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/cloud.png" Width="20" Height="20"/>
+                        <TextBlock x:Name="WeatherDescriptionTextBlock" Text="Nuageux" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 15 0 77">
+                        <Image Source="/Images/water.png" Width="20" Height="20"/>
+                        <TextBlock x:Name="RainPercentageTextBlock" Text="Pluie - 30%" FontSize="14" FontWeight="SemiBold" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <Border CornerRadius="15" Background="Black" Margin="30 0">
+                    <Border CornerRadius="15" Padding="0 30">
+                        <Border.Background>
+                            <ImageBrush ImageSource="/Images/q1.jpg" Stretch="Fill" Opacity="0.65"/>
+                        </Border.Background>
+
+                        <TextBlock x:Name="CityTextBlock" Text="Annecy, France" Foreground="#FFFFFF" VerticalAlignment="Center" TextAlignment="Center" FontWeight="Bold" FontSize="14"/>
+                    </Border>
+                </Border>
+
+            </StackPanel>
+        </Border>
+
+        <!--Right Side-->
+        <Border Grid.Column="1" CornerRadius="0 30 30 0" MouseDown="Border_MouseDown" Background="#F6F6F6" >
+            <StackPanel>
+                <!--Top Menu-->
+                <Grid Margin="40 30 40 10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Label Content="Semaine" Style="{StaticResource activeTextButton}" Margin="15 0 0 0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="CelsiusButton" Content="°C" Style="{StaticResource button}" Click="ConvertToCelsius"/>
+                        <Button x:Name="FahrenheitButton" Content="°F" Style="{StaticResource button}" Click="ConvertToFahrenheit" Margin="10 0 0 0"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="40 20 0 20">
+                    <!-- Pour Dimanche -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Dim"/>
+                            <Image x:Name="WeatherIconSunday" Source="/Images/sun.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureSundayTextBlock" Style="{StaticResource CardDayText}" Text="16°"/>
+                                <TextBlock x:Name="MinTemperatureSundayTextBlock" Style="{StaticResource CardDayText}" Text="3°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pour Lundi -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Lun"/>
+                            <Image x:Name="WeatherIconMonday" Source="/Images/cloud.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureMondayTextBlock" Style="{StaticResource CardDayText}" Text="15°"/>
+                                <TextBlock x:Name="MinTemperatureMondayTextBlock" Style="{StaticResource CardDayText}" Text="6°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pour Mardi -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Mar"/>
+                            <Image x:Name="WeatherIconTuesday" Source="/Images/storm.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureTuesdayTextBlock" Style="{StaticResource CardDayText}" Text="13°"/>
+                                <TextBlock x:Name="MinTemperatureTuesdayTextBlock" Style="{StaticResource CardDayText}" Text="2°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pour Mercredi -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Mer"/>
+                            <Image x:Name="WeatherIconWednesday" Source="/Images/rain.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureWednesdayTextBlock" Style="{StaticResource CardDayText}" Text="13°"/>
+                                <TextBlock x:Name="MinTemperatureWednesdayTextBlock" Style="{StaticResource CardDayText}" Text="2°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pour Jeudi -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Jeu"/>
+                            <Image x:Name="WeatherIconThursday" Source="/Images/rain.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureThursdayTextBlock" Style="{StaticResource CardDayText}" Text="13°"/>
+                                <TextBlock x:Name="MinTemperatureThursdayTextBlock" Style="{StaticResource CardDayText}" Text="2°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pour Vendredi -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Ven"/>
+                            <Image x:Name="WeatherIconFriday" Source="/Images/sun.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureFridayTextBlock" Style="{StaticResource CardDayText}" Text="13°"/>
+                                <TextBlock x:Name="MinTemperatureFridayTextBlock" Style="{StaticResource CardDayText}" Text="2°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Pour Samedi -->
+                    <Border Style="{StaticResource CardDayBorder}">
+                        <StackPanel Style="{StaticResource CardDayStyle}">
+                            <TextBlock Style="{StaticResource CardDayText}" Text="Sam"/>
+                            <Image x:Name="WeatherIconSaturday" Source="/Images/rain.png" Width="30" Margin="0 10 0 10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock x:Name="MaxTemperatureSaturdayTextBlock" Style="{StaticResource CardDayText}" Text="13°"/>
+                                <TextBlock x:Name="MinTemperatureSaturdayTextBlock" Style="{StaticResource CardDayText}" Text="2°" Foreground="#7a7a7a"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!--Widget Section-->
+                <WrapPanel Margin="40 0 0 0">
+                    <!--Widget 1-->
+                    <Border Style="{StaticResource widgetBorder}">
+                        <StackPanel>
+                            <TextBlock Text="Indice UV" Style="{StaticResource titleText}"/>
+                            <Slider x:Name="UvIndexSlider1" Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="0" Maximum="10" Margin="0 12 0 0" ValueChanged="UvIndexSlider_ValueChanged"/>
+                            <Slider x:Name="UvIndexSlider2" Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="0" Maximum="10" Margin="0 5"/>
+                            <Slider x:Name="UvIndexSlider3" Style="{DynamicResource SliderStyle1}" VerticalAlignment="Bottom" Value="0" Maximum="10"/>
+                            <TextBlock x:Name="UvIndexAverageTextBlock" Text="Moyenne de 5" TextAlignment="Center" FontSize="12" Margin="0 3 0 0" Foreground="#9a9a9a"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!--Widget 2-->
+                    <Border Style="{StaticResource widgetBorder}">
+                        <Grid>
+                            <TextBlock Text="État du vent" Style="{StaticResource titleText}"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="WindSpeedTextBlock" Text="7.70" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock Text="km/h" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                <Image Source="/Images/dir.png" Width="25" Height="25" Margin="0 0 10 0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!--Widget 3-->
+                    <Border Style="{StaticResource widgetBorder}">
+                        <!--BorderBrush="#03A9F4"-->
+                        <StackPanel>
+                            <TextBlock Text="Lever du soleil" Style="{StaticResource titleText}"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 25 0 0">
+                                <Image Source="/Images/sunrise.png" Width="40" Height="40" Margin="0 0 10 0"/>
+                                <StackPanel>
+                                    <TextBlock x:Name="SunriseTextBlock" Text="6:35 AM" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock x:Name="SunriseDifferenceTextBlock" Text="-1m 46s" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10 0 0">
+                                <Image Source="/Images/sunset.png" Width="40" Height="40" Margin="0 0 10 0"/>
+                                <StackPanel>
+                                    <TextBlock x:Name="SunsetTextBlock" Text="5:12 AM" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock x:Name="SunsetDifferenceTextBlock" Text="+2m 15s" FontSize="12" Margin="0 2 0 0" Foreground="#a0a0a0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!--Widget 4-->
+                    <Border Style="{StaticResource widgetBorder}">
+                        <Grid>
+                            <TextBlock Text="Humidité" Style="{StaticResource titleText}"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="HumidityTextBlock" Text="56" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock Text="%" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            </StackPanel>
+
+                            <Slider x:Name="HumiditySlider" Style="{DynamicResource SliderStyle1}" Value="0" Maximum="10" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="90"/>
+                        </Grid>
+                    </Border>
+
+                    <!--Widget 5-->
+                    <Border Style="{StaticResource widgetBorder}">
+                        <Grid>
+                            <TextBlock Text="Visibilité" Style="{StaticResource titleText}"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="VisibilityTextBlock" Text="5.2" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock Text="km" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            </StackPanel>
+
+                            <Slider x:Name="VisibilitySlider" Style="{DynamicResource SliderStyle1}" Value="0" Maximum="10" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="90"/>
+                        </Grid>
+                    </Border>
+
+                    <!--Widget 6-->
+                    <Border Style="{StaticResource widgetBorder}">
+                        <Grid>
+                            <TextBlock Text="Qualité de l'air" Style="{StaticResource titleText}"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="AirQualityTextBlock" Text="105" FontSize="34" FontWeight="SemiBold"/>
+                                <TextBlock Text="IQA" FontSize="14" VerticalAlignment="Bottom" Margin="5 0 0 3"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            </StackPanel>
+
+                            <Slider x:Name="AirQualitySlider" Style="{DynamicResource SliderStyle1}" Value="0" Maximum="10" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="90"/>
+                        </Grid>
+                    </Border>
+
+                </WrapPanel>
+
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>
